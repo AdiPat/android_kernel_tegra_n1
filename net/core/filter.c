@@ -315,14 +315,17 @@ load_b:
 		case SKF_AD_MARK:
 			A = skb->mark;
 			continue;
+
 		case SKF_AD_QUEUE:
 			A = skb->queue_mapping;
 			continue;
+
 		case SKF_AD_HATYPE:
 			if (!skb->dev)
 				return 0;
 			A = skb->dev->type;
 			continue;
+
 		case SKF_AD_NLATTR: {
 			struct nlattr *nla;
 

@@ -163,6 +163,7 @@ endif
 #
 # Define NO_DWARF if you do not want debug-info analysis feature at all.
 
+
 $(OUTPUT)PERF-VERSION-FILE: .FORCE-PERF-VERSION-FILE
 	@$(SHELL_PATH) util/PERF-VERSION-GEN $(OUTPUT)
 -include $(OUTPUT)PERF-VERSION-FILE

@@ -437,7 +437,6 @@ static void cpufreq_set_governor(char *governor)
 		}
 	}
 }
-
 void cpufreq_save_default_governor(void)
 {
 	struct file *scaling_gov = NULL;
@@ -466,6 +465,10 @@ void cpufreq_save_default_governor(void)
 		pr_err("%s. Can't open %s\n", __func__, buf);
 	}
 }
+	writel(0x331, p + L2X0_TAG_LATENCY_CTRL);
+	writel(0x441, p + L2X0_DATA_LATENCY_CTRL);
+	writel(7, p + L2X0_PREFETCH_OFFSET);
+	writel(2, p + L2X0_PWR_CTRL);
 
 void cpufreq_restore_default_governor(cpufreq_mode mode)
 {

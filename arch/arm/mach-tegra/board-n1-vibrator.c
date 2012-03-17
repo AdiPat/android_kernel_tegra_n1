@@ -111,11 +111,12 @@ static void n1_vibrator_off(void)
 	if (!vibdata.running)
 		return;
 
-	vibdata.running = false;
+//	vibdata.running = false;
 	isa1200_suspend();
 	clk_disable(vibdata.dap_mclk2);
 	tegra_pinmux_set_tristate(TEGRA_PINGROUP_CDEV2, TEGRA_TRI_TRISTATE);
 	gpio_set_value(GPIO_VIBTONE_EN, 0);
+	vibdata.running = false;
 	wake_unlock(&vibdata.wklock);
 }
 
@@ -167,6 +168,8 @@ static void n1_vibrator_enable(struct timed_output_dev *dev, int value)
 				HRTIMER_MODE_REL);
 		}
 	}
+	else
+		n1_vibrator_off();
 //	else
 //		n1_vibrator_off();
 

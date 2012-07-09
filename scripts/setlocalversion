@@ -42,6 +42,7 @@ scm_version()
 		short=true
 	fi
 
+if test "$1" = "--git"; then
 	# Check for git and a git repo.
 	if test -d .git && head=`git rev-parse --verify --short HEAD 2>/dev/null`; then
 
@@ -83,15 +84,20 @@ scm_version()
 		# All done with git
 		return
 	fi
+fi
 
 	# Check for mercurial and a mercurial repo.
 	if test -d .hg && hgid=`hg id 2>/dev/null`; then
-		tag=`printf '%s' "$hgid" | cut -s -d' ' -f2`
-
-		# Do we have an untagged version?
-		if [ -z "$tag" -o "$tag" = tip ]; then
-			id=`printf '%s' "$hgid" | sed 's/[+ ].*//'`
+		# Do we have an tagged version?  If so, latesttagdistance == 1
+		if [ "`hg log -r . --template '{latesttagdistance}'`" == "1" ]; then
+			id=`hg log -r . --template '{latesttag}'`
 			printf '%s%s' -hg "$id"
+		else
+			tag=`printf '%s' "$hgid" | cut -d' ' -f2`
+			if [ -z "$tag" -o "$tag" = tip ]; then
+				id=`printf '%s' "$hgid" | sed 's/[+ ].*//'`
+				printf '%s%s' -hg "$id"
+			fi
 		fi
 
 		# Are there uncommitted changes?
@@ -160,8 +166,10 @@ if test "$CONFIG_LOCALVERSION_AUTO" = "y"; then
 	# full scm version string
 	res="$res$(scm_version)"
 else
-	# apped a plus sign if the repository is not in a clean tagged
-	# state and  LOCALVERSION= is not specified
+	# append a plus sign if the repository is not in a clean
+	# annotated or signed tagged state (as git describe only
+	# looks at signed or annotated tags - git tag -a/-s) and
+	# LOCALVERSION= is not specified
 	if test "${LOCALVERSION+set}" != "set"; then
 		scm=$(scm_version --short)
 		res="$res${scm:++}"

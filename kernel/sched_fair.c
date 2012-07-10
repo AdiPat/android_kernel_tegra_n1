@@ -3436,10 +3436,8 @@ void select_nohz_load_balancer(int stop_tick)
 
 	if (stop_tick) {
 		if (!cpu_active(cpu)) {
-			if (atomic_read(&nohz.load_balancer) != cpu) {
-				cpumask_clear_cpu(cpu, nohz.cpu_mask);
-				return 0;
-			}
+			if (atomic_read(&nohz.load_balancer) != cpu)
+				return;
 
 			/*
 			 * If we are going offline and still the leader,
@@ -3449,8 +3447,7 @@ void select_nohz_load_balancer(int stop_tick)
 					   nr_cpu_ids) != cpu)
 				BUG();
 
-			cpumask_clear_cpu(cpu, nohz.cpu_mask);
-			return 0;
+			return;
 		}
 
 		cpumask_set_cpu(cpu, nohz.idle_cpus_mask);

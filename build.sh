@@ -1,4 +1,3 @@
-setprop --bold
 echo "|~~~~~~~~STARTING TITANIUM COMPILER~~~~~~~~~~~|"
 echo "|---------------------------------------------|"
 echo "Cleaning source"

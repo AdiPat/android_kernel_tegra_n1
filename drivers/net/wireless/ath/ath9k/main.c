@@ -913,7 +913,7 @@ void ath_radio_disable(struct ath_softc *sc, struct ieee80211_hw *hw)
 	if (!ah->curchan)
 		ah->curchan = ath_get_curchannel(sc, hw);
 
-	spin_lock_bh(&sc->sc_resetlock);
+	spin_lock_bh(&sc->sc_pcu_lock);
 	r = ath9k_hw_reset(ah, ah->curchan, ah->caldata, false);
 	if (r) {
 		ath_print(ath9k_hw_common(sc->sc_ah), ATH_DBG_FATAL,
@@ -988,6 +988,7 @@ int ath_reset(struct ath_softc *sc, bool retry_tx)
 				spin_unlock_bh(&sc->tx.txq[i].axq_lock);
 			}
 		}
+		spin_unlock_irqrestore(&sc->sc_pm_lock, flags);
 	}
 
 	ieee80211_wake_queues(hw);

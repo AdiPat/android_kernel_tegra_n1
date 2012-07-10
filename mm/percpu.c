@@ -286,8 +286,13 @@ static void *pcpu_mem_alloc(size_t size)
 		return NULL;
 
 	if (size <= PAGE_SIZE)
-	else 
-        return vzalloc(size);
+		return kzalloc(size, GFP_KERNEL);
+	else {
+		void *ptr = vmalloc(size);
+		if (ptr)
+			memset(ptr, 0, size);
+		return ptr;
+	}
 }
 
 /**

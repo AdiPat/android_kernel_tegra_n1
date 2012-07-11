@@ -249,11 +249,7 @@ static inline u64 atomic64_read(atomic64_t *v)
 	__asm__ __volatile__("@ atomic64_read\n"
 "	ldrexd	%0, %H0, [%1]"
 	: "=&r" (result)
-<<<<<<< HEAD
 	: "r" (&v->counter), "Qo" (v->counter)
-=======
-	: "r" (&v->counter)
->>>>>>> 7bb4447... ARM: 5889/1: Add atomic64 routines for ARMv6k and above.
 	);
 
 	return result;
@@ -264,19 +260,11 @@ static inline void atomic64_set(atomic64_t *v, u64 i)
 	u64 tmp;
 
 	__asm__ __volatile__("@ atomic64_set\n"
-<<<<<<< HEAD
 "1:	ldrexd	%0, %H0, [%2]\n"
 "	strexd	%0, %3, %H3, [%2]\n"
 "	teq	%0, #0\n"
 "	bne	1b"
 	: "=&r" (tmp), "=Qo" (v->counter)
-=======
-"1:	ldrexd	%0, %H0, [%1]\n"
-"	strexd	%0, %2, %H2, [%1]\n"
-"	teq	%0, #0\n"
-"	bne	1b"
-	: "=&r" (tmp)
->>>>>>> 7bb4447... ARM: 5889/1: Add atomic64 routines for ARMv6k and above.
 	: "r" (&v->counter), "r" (i)
 	: "cc");
 }
@@ -287,7 +275,6 @@ static inline void atomic64_add(u64 i, atomic64_t *v)
 	unsigned long tmp;
 
 	__asm__ __volatile__("@ atomic64_add\n"
-<<<<<<< HEAD
 "1:	ldrexd	%0, %H0, [%3]\n"
 "	adds	%0, %0, %4\n"
 "	adc	%H0, %H0, %H4\n"
@@ -295,15 +282,6 @@ static inline void atomic64_add(u64 i, atomic64_t *v)
 "	teq	%1, #0\n"
 "	bne	1b"
 	: "=&r" (result), "=&r" (tmp), "+Qo" (v->counter)
-=======
-"1:	ldrexd	%0, %H0, [%2]\n"
-"	adds	%0, %0, %3\n"
-"	adc	%H0, %H0, %H3\n"
-"	strexd	%1, %0, %H0, [%2]\n"
-"	teq	%1, #0\n"
-"	bne	1b"
-	: "=&r" (result), "=&r" (tmp)
->>>>>>> 7bb4447... ARM: 5889/1: Add atomic64 routines for ARMv6k and above.
 	: "r" (&v->counter), "r" (i)
 	: "cc");
 }
@@ -316,7 +294,6 @@ static inline u64 atomic64_add_return(u64 i, atomic64_t *v)
 	smp_mb();
 
 	__asm__ __volatile__("@ atomic64_add_return\n"
-<<<<<<< HEAD
 "1:	ldrexd	%0, %H0, [%3]\n"
 "	adds	%0, %0, %4\n"
 "	adc	%H0, %H0, %H4\n"
@@ -324,15 +301,6 @@ static inline u64 atomic64_add_return(u64 i, atomic64_t *v)
 "	teq	%1, #0\n"
 "	bne	1b"
 	: "=&r" (result), "=&r" (tmp), "+Qo" (v->counter)
-=======
-"1:	ldrexd	%0, %H0, [%2]\n"
-"	adds	%0, %0, %3\n"
-"	adc	%H0, %H0, %H3\n"
-"	strexd	%1, %0, %H0, [%2]\n"
-"	teq	%1, #0\n"
-"	bne	1b"
-	: "=&r" (result), "=&r" (tmp)
->>>>>>> 7bb4447... ARM: 5889/1: Add atomic64 routines for ARMv6k and above.
 	: "r" (&v->counter), "r" (i)
 	: "cc");
 
@@ -347,7 +315,6 @@ static inline void atomic64_sub(u64 i, atomic64_t *v)
 	unsigned long tmp;
 
 	__asm__ __volatile__("@ atomic64_sub\n"
-<<<<<<< HEAD
 "1:	ldrexd	%0, %H0, [%3]\n"
 "	subs	%0, %0, %4\n"
 "	sbc	%H0, %H0, %H4\n"
@@ -355,15 +322,6 @@ static inline void atomic64_sub(u64 i, atomic64_t *v)
 "	teq	%1, #0\n"
 "	bne	1b"
 	: "=&r" (result), "=&r" (tmp), "+Qo" (v->counter)
-=======
-"1:	ldrexd	%0, %H0, [%2]\n"
-"	subs	%0, %0, %3\n"
-"	sbc	%H0, %H0, %H3\n"
-"	strexd	%1, %0, %H0, [%2]\n"
-"	teq	%1, #0\n"
-"	bne	1b"
-	: "=&r" (result), "=&r" (tmp)
->>>>>>> 7bb4447... ARM: 5889/1: Add atomic64 routines for ARMv6k and above.
 	: "r" (&v->counter), "r" (i)
 	: "cc");
 }
@@ -376,7 +334,6 @@ static inline u64 atomic64_sub_return(u64 i, atomic64_t *v)
 	smp_mb();
 
 	__asm__ __volatile__("@ atomic64_sub_return\n"
-<<<<<<< HEAD
 "1:	ldrexd	%0, %H0, [%3]\n"
 "	subs	%0, %0, %4\n"
 "	sbc	%H0, %H0, %H4\n"
@@ -384,15 +341,6 @@ static inline u64 atomic64_sub_return(u64 i, atomic64_t *v)
 "	teq	%1, #0\n"
 "	bne	1b"
 	: "=&r" (result), "=&r" (tmp), "+Qo" (v->counter)
-=======
-"1:	ldrexd	%0, %H0, [%2]\n"
-"	subs	%0, %0, %3\n"
-"	sbc	%H0, %H0, %H3\n"
-"	strexd	%1, %0, %H0, [%2]\n"
-"	teq	%1, #0\n"
-"	bne	1b"
-	: "=&r" (result), "=&r" (tmp)
->>>>>>> 7bb4447... ARM: 5889/1: Add atomic64 routines for ARMv6k and above.
 	: "r" (&v->counter), "r" (i)
 	: "cc");
 
@@ -410,21 +358,12 @@ static inline u64 atomic64_cmpxchg(atomic64_t *ptr, u64 old, u64 new)
 
 	do {
 		__asm__ __volatile__("@ atomic64_cmpxchg\n"
-<<<<<<< HEAD
 		"ldrexd		%1, %H1, [%3]\n"
 		"mov		%0, #0\n"
 		"teq		%1, %4\n"
 		"teqeq		%H1, %H4\n"
 		"strexdeq	%0, %5, %H5, [%3]"
 		: "=&r" (res), "=&r" (oldval), "+Qo" (ptr->counter)
-=======
-		"ldrexd		%1, %H1, [%2]\n"
-		"mov		%0, #0\n"
-		"teq		%1, %3\n"
-		"teqeq		%H1, %H3\n"
-		"strexdeq	%0, %4, %H4, [%2]"
-		: "=&r" (res), "=&r" (oldval)
->>>>>>> 7bb4447... ARM: 5889/1: Add atomic64 routines for ARMv6k and above.
 		: "r" (&ptr->counter), "r" (old), "r" (new)
 		: "cc");
 	} while (res);
@@ -442,19 +381,11 @@ static inline u64 atomic64_xchg(atomic64_t *ptr, u64 new)
 	smp_mb();
 
 	__asm__ __volatile__("@ atomic64_xchg\n"
-<<<<<<< HEAD
 "1:	ldrexd	%0, %H0, [%3]\n"
 "	strexd	%1, %4, %H4, [%3]\n"
 "	teq	%1, #0\n"
 "	bne	1b"
 	: "=&r" (result), "=&r" (tmp), "+Qo" (ptr->counter)
-=======
-"1:	ldrexd	%0, %H0, [%2]\n"
-"	strexd	%1, %3, %H3, [%2]\n"
-"	teq	%1, #0\n"
-"	bne	1b"
-	: "=&r" (result), "=&r" (tmp)
->>>>>>> 7bb4447... ARM: 5889/1: Add atomic64 routines for ARMv6k and above.
 	: "r" (&ptr->counter), "r" (new)
 	: "cc");
 
@@ -471,28 +402,16 @@ static inline u64 atomic64_dec_if_positive(atomic64_t *v)
 	smp_mb();
 
 	__asm__ __volatile__("@ atomic64_dec_if_positive\n"
-<<<<<<< HEAD
 "1:	ldrexd	%0, %H0, [%3]\n"
-=======
-"1:	ldrexd	%0, %H0, [%2]\n"
->>>>>>> 7bb4447... ARM: 5889/1: Add atomic64 routines for ARMv6k and above.
 "	subs	%0, %0, #1\n"
 "	sbc	%H0, %H0, #0\n"
 "	teq	%H0, #0\n"
 "	bmi	2f\n"
-<<<<<<< HEAD
 "	strexd	%1, %0, %H0, [%3]\n"
 "	teq	%1, #0\n"
 "	bne	1b\n"
 "2:"
 	: "=&r" (result), "=&r" (tmp), "+Qo" (v->counter)
-=======
-"	strexd	%1, %0, %H0, [%2]\n"
-"	teq	%1, #0\n"
-"	bne	1b\n"
-"2:"
-	: "=&r" (result), "=&r" (tmp)
->>>>>>> 7bb4447... ARM: 5889/1: Add atomic64 routines for ARMv6k and above.
 	: "r" (&v->counter)
 	: "cc");
 
@@ -510,7 +429,6 @@ static inline int atomic64_add_unless(atomic64_t *v, u64 a, u64 u)
 	smp_mb();
 
 	__asm__ __volatile__("@ atomic64_add_unless\n"
-<<<<<<< HEAD
 "1:	ldrexd	%0, %H0, [%4]\n"
 "	teq	%0, %5\n"
 "	teqeq	%H0, %H5\n"
@@ -523,20 +441,6 @@ static inline int atomic64_add_unless(atomic64_t *v, u64 a, u64 u)
 "	bne	1b\n"
 "2:"
 	: "=&r" (val), "+r" (ret), "=&r" (tmp), "+Qo" (v->counter)
-=======
-"1:	ldrexd	%0, %H0, [%3]\n"
-"	teq	%0, %4\n"
-"	teqeq	%H0, %H4\n"
-"	moveq	%1, #0\n"
-"	beq	2f\n"
-"	adds	%0, %0, %5\n"
-"	adc	%H0, %H0, %H5\n"
-"	strexd	%2, %0, %H0, [%3]\n"
-"	teq	%2, #0\n"
-"	bne	1b\n"
-"2:"
-	: "=&r" (val), "=&r" (ret), "=&r" (tmp)
->>>>>>> 7bb4447... ARM: 5889/1: Add atomic64 routines for ARMv6k and above.
 	: "r" (&v->counter), "r" (u), "r" (a)
 	: "cc");
 

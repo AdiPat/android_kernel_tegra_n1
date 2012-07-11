@@ -80,11 +80,7 @@ static inline void LOAD_OP(int I, u64 *W, const u8 *input)
 
 static inline void BLEND_OP(int I, u64 *W)
 {
-<<<<<<< HEAD
 	W[I] = s1(W[I-2]) + W[I-7] + s0(W[I-15]) + W[I-16];
-=======
-	W[I & 15] += s1(W[(I-2) & 15]) + W[(I-7) & 15] + s0(W[(I-15) & 15]);
->>>>>>> 3e15b23... crypto: sha512 - Use binary and instead of modulus
 }
 
 static void
@@ -107,7 +103,6 @@ sha512_transform(u64 *state, const u8 *input)
 	a=state[0];   b=state[1];   c=state[2];   d=state[3];
 	e=state[4];   f=state[5];   g=state[6];   h=state[7];
 
-<<<<<<< HEAD
 	/* now iterate */
 	for (i=0; i<80; i+=8) {
 		t1 = h + e1(e) + Ch(e,f,g) + sha512_K[i  ] + W[i  ];
@@ -126,40 +121,6 @@ sha512_transform(u64 *state, const u8 *input)
 		t2 = e0(c) + Maj(c,d,e);    f+=t1;    b=t1+t2;
 		t1 = a + e1(f) + Ch(f,g,h) + sha512_K[i+7] + W[i+7];
 		t2 = e0(b) + Maj(b,c,d);    e+=t1;    a=t1+t2;
-=======
-#define SHA512_0_15(i, a, b, c, d, e, f, g, h)			\
-	t1 = h + e1(e) + Ch(e, f, g) + sha512_K[i] + W[i];	\
-	t2 = e0(a) + Maj(a, b, c);				\
-	d += t1;						\
-	h = t1 + t2
-
-#define SHA512_16_79(i, a, b, c, d, e, f, g, h)			\
-	BLEND_OP(i, W);						\
-	t1 = h + e1(e) + Ch(e, f, g) + sha512_K[i] + W[(i)&15];	\
-	t2 = e0(a) + Maj(a, b, c);				\
-	d += t1;						\
-	h = t1 + t2
-
-	for (i = 0; i < 16; i += 8) {
-		SHA512_0_15(i, a, b, c, d, e, f, g, h);
-		SHA512_0_15(i + 1, h, a, b, c, d, e, f, g);
-		SHA512_0_15(i + 2, g, h, a, b, c, d, e, f);
-		SHA512_0_15(i + 3, f, g, h, a, b, c, d, e);
-		SHA512_0_15(i + 4, e, f, g, h, a, b, c, d);
-		SHA512_0_15(i + 5, d, e, f, g, h, a, b, c);
-		SHA512_0_15(i + 6, c, d, e, f, g, h, a, b);
-		SHA512_0_15(i + 7, b, c, d, e, f, g, h, a);
-	}
-	for (i = 16; i < 80; i += 8) {
-		SHA512_16_79(i, a, b, c, d, e, f, g, h);
-		SHA512_16_79(i + 1, h, a, b, c, d, e, f, g);
-		SHA512_16_79(i + 2, g, h, a, b, c, d, e, f);
-		SHA512_16_79(i + 3, f, g, h, a, b, c, d, e);
-		SHA512_16_79(i + 4, e, f, g, h, a, b, c, d);
-		SHA512_16_79(i + 5, d, e, f, g, h, a, b, c);
-		SHA512_16_79(i + 6, c, d, e, f, g, h, a, b);
-		SHA512_16_79(i + 7, b, c, d, e, f, g, h, a);
->>>>>>> 3e15b23... crypto: sha512 - Use binary and instead of modulus
 	}
 
 	state[0] += a; state[1] += b; state[2] += c; state[3] += d;

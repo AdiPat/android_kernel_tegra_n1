@@ -331,10 +331,11 @@ CHECK		= sparse
 
 CHECKFLAGS     := -D__linux__ -Dlinux -D__STDC__ -Dunix -D__unix__ \
 		  -Wbitwise -Wno-return-void $(CF)
+MODFLAGS  = -DMODULE -O3 –march=armv7-a –mfpu=vfpv3-d16 –mfloat-abi=softfp
 CFLAGS_MODULE   =
 AFLAGS_MODULE   =
 LDFLAGS_MODULE  =
-CFLAGS_KERNEL	=
+CFLAGS_KERNEL	= -O3 –march=armv7-a –mfpu=vfpv3-d16 –mfloat-abi=softfp
 AFLAGS_KERNEL	=
 CFLAGS_GCOV	= -fprofile-arcs -ftest-coverage
 

@@ -43,6 +43,8 @@
 
 #define DMC_DEBUG 0
 
+#define REQ_RO_SYNC 
+
 #define DM_MSG_PREFIX "cache"
 #define DMC_PREFIX "dm-cache: "
 

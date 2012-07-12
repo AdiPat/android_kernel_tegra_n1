@@ -2916,23 +2916,8 @@ void __init tegra_n1_reserve(void)
 	if (memblock_reserve(0x0, 4096) < 0)
 		pr_warn("Cannot reserve first 4K of memory for safety\n");
 
-	if (system_rev < 2) /* 512 MB */
-		tegra_reserve(SZ_128M, SZ_8M, SZ_16M);
-	else	/* 1GB */
-		tegra_reserve(SZ_256M, SZ_8M, SZ_16M);
+	tegra_reserve(SZ_128M, SZ_8M, SZ_16M);
 
-	/* Reserve memory for the ram console.
-	ram_console_start = memblock_end_of_DRAM() - SZ_1M;  //Disabled RAM Console 
-
-	ret = memblock_remove(ram_console_start, SZ_1M); 
-	if (ret < 0) {
-		pr_err("Failed to reserve 0x%x bytes for ram_console at "
-			"0x%llx, err = %d.\n",
-			SZ_1M, ram_console_start, ret);
-	} else {
-		ram_console_resource[0].start = ram_console_start;
-		ram_console_resource[0].end = ram_console_start + SZ_1M - 1;
-	} */
 }
 
 MACHINE_START(TEGRA_GENERIC, "n1")

@@ -89,6 +89,9 @@
 #endif
 #include <linux/kernel_sec_common.h>
 
+#define SZ_112M                         0x07000000 /* Define Value for 112 MB */ 
+#define SZ_6M                           0x00600000 /* Define Value for 6 MB */ 
+
 #define HWREV_FOR_EXTERNEL_CHARGER	7
 
 /* WLAN STATIC BUF Implementation */
@@ -2916,7 +2919,7 @@ void __init tegra_n1_reserve(void)
 	if (memblock_reserve(0x0, 4096) < 0)
 		pr_warn("Cannot reserve first 4K of memory for safety\n");
 
-	tegra_reserve(SZ_128M, SZ_8M, SZ_16M);
+	tegra_reserve(SZ_64M, SZ_6M, SZ_8M);
 
 }
 

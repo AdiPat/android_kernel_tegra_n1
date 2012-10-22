@@ -577,18 +577,6 @@ static struct tegra_ulpi_config ulpi_phy_config = {
 };
 #endif
 
-static struct resource ram_console_resource[] = {
-	{
-		.flags = IORESOURCE_MEM,
-	}
-};
-
-static struct platform_device ram_console_device = {
-	.name = "ram_console",
-	.id = -1,
-	.num_resources = ARRAY_SIZE(ram_console_resource),
-	.resource = ram_console_resource,
-};
 static __initdata struct tegra_clk_init_table n1_clk_init_table[] = {
 	/* name		parent		rate		enabled */
 	{ "uartb",	"pll_p",	216000000,	true},
@@ -1268,7 +1256,6 @@ static struct platform_device *n1_devices[] __initdata = {
 	&bcm4330_bluetooth_device,
 #endif
 	&baseband_dit_device,
-	&ram_console_device,
 
 	&tegra_pcm_device,
 	&tegra_audio_device,
@@ -2410,7 +2397,6 @@ late_initcall(tegra_n1_protected_aperture_init);
 
 void __init tegra_n1_reserve(void)
 {
-	u64 ram_console_start;
 	int ret;
 
 	if (memblock_reserve(0x0, 4096) < 0)
@@ -2421,25 +2407,13 @@ void __init tegra_n1_reserve(void)
 	else	/* 1GB */
 		tegra_reserve(SZ_256M, SZ_8M, SZ_16M);
 
-	/* Reserve memory for the ram console. */
-	ram_console_start = memblock_end_of_DRAM() - SZ_1M;
-
-	ret = memblock_remove(ram_console_start, SZ_1M);
-	if (ret < 0) {
-		pr_err("Failed to reserve 0x%x bytes for ram_console at "
-			"0x%llx, err = %d.\n",
-			SZ_1M, ram_console_start, ret);
-	} else {
-		ram_console_resource[0].start = ram_console_start;
-		ram_console_resource[0].end = ram_console_start + SZ_1M - 1;
-	}
 }
 
 MACHINE_START(SAMSUNG_N1, "n1")
 	.boot_params    = 0x00000100,
 	.map_io         = tegra_map_common_io,
 	.reserve        = tegra_n1_reserve,
-	.init_early		= tegra_init_early,
+	.init_early	= tegra_init_early,
 	.init_irq       = tegra_init_irq,
 	.timer          = &tegra_timer,
 	.init_machine   = tegra_n1_init,

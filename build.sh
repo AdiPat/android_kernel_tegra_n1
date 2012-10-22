@@ -19,8 +19,8 @@ export CROSS_COMPILE=$CROSS_COMPILE-
 make clean mrproper
 echo "Importing defconfig"
 make tegra_n1_defconfig
-echo "Please Release Version" 
-read $version
+echo "Please Enter Release Version" 
+read $v
 echo ">> COMPILING! >>>"
 make -j84
 echo "Copying modules and stripping em"
@@ -43,6 +43,14 @@ cd $OUT
 echo "CLear old zip files"
 rm *.zip
 echo "Making CWM Flashable zip"
-zip -r GT-I9103_TITANIUM_KERNEL_BUILD-$version.zip META-INF boot.img
-echo "DOne"
+zip -r GT-I9103_TITANIUM_KERNEL_BUILD_$v.zip META-INF boot.img
+
+echo "Signing the zip file"
+
+java -jar signapk.jar testkey.x509.pem testkey.pk8 GT-I9103_TITANIUM_KERNEL_BUILD_$v.zip SIGNED_GT-I9103_TITANIUM_KERNEL_BUILD_$v.zip.zip
+
+rm GT-I9103_TITANIUM_KERNEL_BUILD_$v.zip
+
+echo "DONE, PRESS ENTER TO FINISH"
+read ANS
  

@@ -32,7 +32,7 @@ for m in $(find . | grep .ko | grep './')
 do
         echo $m
 
-$CROSS_COMPILE-strip --strip-unneeded $m
+/home/aditya/Toolchain/arm-eabi-linaro-4.6.2/bin/arm-eabi-strip --strip-unneeded $m
 done
 cd $KERNEL_DIR
 echo "Packing Ramdisk"

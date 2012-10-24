@@ -49,6 +49,7 @@
 #undef OOB_INTR_ONLY
 #define SDIO_ISR_THREAD
 #define USE_CID_CHECK
+#define READ_MACADDR
 #define WRITE_MACADDR
 #ifdef RSSI_OFFSET
 #undef RSSI_OFFSET

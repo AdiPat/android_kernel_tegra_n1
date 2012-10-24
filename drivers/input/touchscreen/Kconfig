@@ -780,4 +780,10 @@ config TOUCHSCREEN_ATMEL_MXT224E
         To compile this driver as a module, choose M here: the
         module will be called atmel_mxt224E.
 
+config TOUCHKEY_BLN
+    bool "BLN Support"
+    depends on TOUCHSCREEN_ATMEL_MXT224E
+    help
+	BLN support.
+
 endif

@@ -20,4 +20,4 @@
 
 #define SZ_48M  (SZ_32M + SZ_16M)
 #define SZ_160M (SZ_128M | SZ_32M)
-#define SZ_200M (SZ 160M + SZ_32M + SZ_8M) 
+#define SZ_200M (SZ_160M + SZ_32M + SZ_8M) 

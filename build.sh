@@ -2,9 +2,11 @@ ROOT="/home/aditya/i9103"
 CROSS_COMPILE="/home/aditya/Toolchain/arm-eabi-linaro-4.6.2/bin/arm-eabi"
 KERNEL_DIR="/home/aditya/i9103/experimental"
 RAMDISK_DIR="/home/aditya/i9103/ramdisk"
+RAMDISK_MIUI="/home/aditya/i9103/ramdisk-miui"
 RAMDISK_CM_DIR="/home/aditya/i9103/ramdisk-cm10"
 MODULES_DIR="$RAMDISK_DIR/lib/modules"
 MODULES_CM_DIR="$RAMDISK_CM_DIR/lib/modules"
+MODULES_MIUI_DIR="$RAMDISK_MIUI/lib/modules"
 OUT="/home/aditya/i9103/out"
 
 echo "|~~~~~~~~COMPILING TITANIUM KERNEL ~~~~~~~~~~~|"
@@ -28,6 +30,7 @@ make -j84
 echo "Copying modules and stripping em"
 find -name '*.ko' -exec cp -av {} $MODULES_DIR/ \;
 find -name '*.ko' -exec cp -av {} $MODULES_CM_DIR/ \;
+find -name '*.ko' -exec cp -av {} $MODULES_MIUI_DIR/ \;
 cd $MODULES_DIR
 echo "Strip modules for size"
 
@@ -45,13 +48,24 @@ do
 
 /home/aditya/Toolchain/arm-eabi-linaro-4.6.2/bin/arm-eabi-strip --strip-unneeded $m
 done
+
+cd $MODULES_MIUI_DIR
+for m in $(find . | grep .ko | grep './')
+do
+        echo $m
+
+/home/aditya/Toolchain/arm-eabi-linaro-4.6.2/bin/arm-eabi-strip --strip-unneeded $m
+done
+
 cd $KERNEL_DIR
 echo "Packing Ramdisk"
 cd $ROOT
 ./mkbootfs $RAMDISK_DIR | gzip > ramdisk.gz
 ./mkbootfs $RAMDISK_CM_DIR | gzip > ramdisk-cm10.gz 
+./mkbootfs $RAMDISK_MIUI | gzip > ramdisk-miui.gz
 ./mkbootimg --kernel $KERNEL_DIR/arch/arm/boot/zImage --ramdisk ramdisk.gz -o $OUT/boot.img --base 10000000
 ./mkbootimg --kernel $KERNEL_DIR/arch/arm/boot/zImage --ramdisk ramdisk-cm10.gz -o $OUT/boot_cm10.img --base 10000000
+./mkbootimg --kernel $KERNEL_DIR/arch/arm/boot/zImage --ramdisk ramdisk-miui.gz -o $OUT/boot_miui.img --base 10000000
 cd $OUT
 echo "CLear old zip files"
 rm *.zip
@@ -78,6 +92,18 @@ java -jar signapk.jar testkey.x509.pem testkey.pk8 CM10_KERNEL.zip SIGNED_CM10_K
 #########
 rm CM10_KERNEL.zip 
 rm boot.img 
+mv boot_miui.img boot.img
+# Pack MIUI 
+
+echo "Making CWM Flashable zip"
+zip -r MIUI_KERNEL.zip META-INF boot.img
+
+echo "Signing the zip file"
+
+java -jar signapk.jar testkey.x509.pem testkey.pk8 MIUI_KERNEL.zip SIGNED_MIUI_KERNEL.zip
+
+rm MIUI_KERNEL.zip
+rm boot.img
 
 echo "DONE, PRESS ENTER TO FINISH"
 read ANS

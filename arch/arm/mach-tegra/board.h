@@ -122,7 +122,7 @@ extern bool tegra_lp0_vec_relocate;
 extern unsigned long tegra_grhost_aperture;
 
 extern struct sys_timer tegra_timer;
-
+struct early_suspend;
 #ifndef CONFIG_MACH_BOSE_ATT
 extern int n1_panel_pre_enable(void);
 extern int n1_panel_disable(void);

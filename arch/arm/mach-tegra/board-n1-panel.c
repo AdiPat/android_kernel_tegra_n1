@@ -325,7 +325,7 @@ struct early_suspend n1_panel_early_suspender;
 
 static void n1_panel_early_suspend(struct early_suspend *h)
 {
-	unsigned i;
+	//unsigned i;
 	printk(KERN_INFO "\n ************ %s : %d\n", __func__, __LINE__);
 
 	n1_panel_disable();

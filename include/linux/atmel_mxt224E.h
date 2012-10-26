@@ -886,5 +886,5 @@ void    mxt_hw_reset(void);
 #define BACK_LED_4KEY			0xFB
 #define SEARCH_LED_4KEY		0xF7
 
-static void key_led_on(struct mxt_data *mxt, u32 val);
+void key_led_on(struct mxt_data *mxt, u32 val);
 #endif

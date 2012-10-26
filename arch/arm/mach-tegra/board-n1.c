@@ -694,18 +694,6 @@ static struct platform_device sec_device_jack = {
 	.dev.platform_data	= &sec_jack_pdata,
 };
 
-
-static struct tegra_ulpi_config n1_ehci2_ulpi_phy_config = {
-	.reset_gpio = TEGRA_GPIO_PV1,
-	.clk = "clk_dev2",
-};
-
-static struct tegra_ehci_platform_data n1_ehci2_ulpi_platform_data = {
-	.operating_mode = TEGRA_USB_HOST,
-	.power_down_on_bus_suspend = 0,
-	.phy_config = &n1_ehci2_ulpi_phy_config,
-};
-
 static struct tegra_i2c_platform_data n1_i2c1_platform_data = {
 	.adapter_nr	= 0,
 	.bus_count	= 1,
@@ -1158,7 +1146,7 @@ static struct sec_bat_platform_data sec_bat_pdata = {
 	.sub_charger_name	= "max8922-charger",
 #endif
 	.adc_arr_size		= NULL,
-	.adc_table			= NULL,
+	.adc_table		= NULL,
 	.adc_channel		= NULL,
 	.get_init_cable_state	= sec_bat_get_init_cable_state,
 	.get_temperature	= sec_bat_get_temperature,
@@ -1517,11 +1505,6 @@ struct tegra_pingroup_config mclk = {
 	TEGRA_TRI_TRISTATE
 };
 
-static struct s5k4ecgx_reg_8 s5k4ecgx_active_discharge[] = {
-	{0x01, 0xFF},	// active discharge enable
-	{S5K4ECGX_TABLE_END_8, 0x0},
-};
-
 static struct s5k4ecgx_reg_8 s5k4ecgx_VCM_ON[] = {
 	{0x08, 0x14},	// 2.8V for VCM - LDO4
 	{0x00, 0x05},
@@ -1576,7 +1559,7 @@ static const struct s5k6aafx_reg s5k6aafx_stby_reg2[] = {
 struct i2c_client *i2c_client_pmic;
 struct i2c_client *i2c_client_camera;
 
-static void n1_s5k4ecgx_power_on()
+static void n1_s5k4ecgx_power_on(void)
 {
 	pr_err("%s,\n", __func__);
 
@@ -2322,6 +2305,7 @@ static void __init tegra_n1_init(void)
 {
 	char serial[20];
 #ifdef CONFIG_KERNEL_DEBUG_SEC
+	struct device *platform = n1_devices[0]->dev.parent;
 	int ret = 0;
 #endif
 	tegra_clk_init_from_table(n1_clk_init_table);
@@ -2381,7 +2365,7 @@ static void __init tegra_n1_init(void)
 	console_suspend_enabled = 0;
 #ifdef CONFIG_KERNEL_DEBUG_SEC
 	/* Add debug level node */
-	struct device *platform = n1_devices[0]->dev.parent;
+	
 	ret = device_create_file(platform, &dev_attr_sec_debug_level);
 	if (ret)
 		printk("Fail to create sec_debug_level file\n");
@@ -2397,8 +2381,6 @@ late_initcall(tegra_n1_protected_aperture_init);
 
 void __init tegra_n1_reserve(void)
 {
-	int ret;
-
 	if (memblock_reserve(0x0, 4096) < 0)
 		pr_warn("Cannot reserve first 4K of memory for safety\n");
 

@@ -2403,7 +2403,7 @@ void __init tegra_n1_reserve(void)
 		pr_warn("Cannot reserve first 4K of memory for safety\n");
 
 	// N1 uses 1GB by default 
-	tegra_reserve(SZ_160M, SZ_8M, SZ_16M);
+	tegra_reserve(SZ_200M, SZ_8M, SZ_16M);
 
 }
 

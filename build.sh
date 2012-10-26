@@ -1,6 +1,6 @@
 ROOT="/home/aditya/i9103"
 CROSS_COMPILE="/home/aditya/Toolchain/arm-eabi-linaro-4.6.2/bin/arm-eabi"
-KERNEL_DIR="/home/aditya/i9103/Kernel"
+KERNEL_DIR="/home/aditya/i9103/experimental"
 RAMDISK_DIR="/home/aditya/i9103/ramdisk"
 RAMDISK_CM_DIR="/home/aditya/i9103/ramdisk-cm10"
 MODULES_DIR="$RAMDISK_DIR/lib/modules"

@@ -3800,7 +3800,7 @@ static ssize_t test_resume(struct device *dev, struct device_attribute *attr, ch
 #endif
 
 #ifdef KEY_LED_CONTROL
-static void key_led_on(struct mxt_data *mxt, u32 val)
+void key_led_on(struct mxt_data *mxt, u32 val)
 {
 	if (mxt->pdata->key_led_en1 != NULL)
 		gpio_direction_output(mxt->pdata->key_led_en1, (val & 0x01) ? true : false);

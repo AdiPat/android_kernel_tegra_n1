@@ -506,7 +506,6 @@ static int touchbx[MAX_GHOSTCHECK_FINGER] = {
 static int touchby[MAX_GHOSTCHECK_FINGER] = {
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 static int ghosttouchcount;
-static int tsp_reboot_count;
 static int cFailbyPattenTracking;
 #endif
 
@@ -868,54 +867,7 @@ static void mxt_metal_suppression_off(struct work_struct *work)
 	return;
 }
 
-/* mxt224E reconfigration */
-static void mxt_reconfigration_normal(struct work_struct *work)
-{
-	struct	mxt_data *mxt;
-	int error, id;
-	mxt = container_of(work, struct mxt_data, config_dwork.work);
 
-	if (debug >= DEBUG_INFO)
-		pr_info("[TSP]%s \n", __func__);
-
-	disable_irq(mxt->client->irq);
-	for (id = 0 ; id < MXT_MAX_NUM_TOUCHES ; ++id) {
-		if ( mtouch_info[id].pressure == -1 )
-			continue;
-		schedule_delayed_work(&mxt->config_dwork, 300);
-		pr_warning("[TSP] touch pressed!! %s didn't execute!!\n", __func__);
-		enable_irq(mxt->client->irq);
-		return;
-	}
-
-	/* 0331 Added for Palm recovery */
-
-	/* T8_ATCHFRCCALTHR */
-	error = mxt_write_byte(mxt->client,
-		MXT_BASE_ADDR(MXT_GEN_ACQUIRECONFIG_T8) + MXT_ADR_T8_ATCHFRCCALTHR,
-		T8_ATCHFRCCALTHR);
-
-	if (error < 0) pr_err("[TSP] %s, %d Error!!\n", __func__, __LINE__);
-
-	/* T8_ATCHFRCCALRATIO */
-	error = mxt_write_byte(mxt->client,
-		MXT_BASE_ADDR(MXT_GEN_ACQUIRECONFIG_T8) + MXT_ADR_T8_ATCHFRCCALRATIO,
-		0);
-
-	if (error < 0) pr_err("[TSP] %s, %d Error!!\n", __func__, __LINE__);
-
-	/* T42_MAXNUMTCHS */
-	error = mxt_write_byte(mxt->client,
-		MXT_BASE_ADDR(MXT_PROCI_TOUCHSUPPRESSION_T42) + MXT_ADR_T42_MAXNUMTCHS,
-		T42_MAXNUMTCHS);
-
-	if (error < 0) pr_err("[TSP] %s, %d Error!!\n", __func__, __LINE__);
-
-
-	mxt_reconfig_flag = true;
-	enable_irq(mxt->client->irq);
-	return;
-}
 
 /* Calculates the 24-bit CRC sum. */
 static u32 mxt_CRC_24(u32 crc, u8 byte1, u8 byte2)
@@ -1253,15 +1205,6 @@ static void TSP_forced_release_for_call(struct mxt_data *mxt)
 	calibrate_chip(mxt);
 }
 
-static ssize_t TSP_Clibration_Power_Off(struct device *dev,
-		struct device_attribute *attr, char *buf)
-{
-	struct mxt_data *mxt = dev_get_drvdata(dev);
-
-	pr_info("[TSP] %s : force calibration\n", __func__);
-	TSP_forced_release_for_call(mxt);
-	return sprintf(buf, "1\n");
-}
 
 /*
 Forced reboot sequence.
@@ -1337,7 +1280,6 @@ void process_T9_message(u8 *message, struct mxt_data *mxt)
 	static int prev_touch_id = -1;
 	int i, error;
 	u16 chkpress = 0;
-	u16 finger_channel_cnt = 0;
 	u8 touch_message_flag = 0;
 	static int cal_move =0;
 #ifdef TOUCH_LOCKUP_PATTERN_RELEASE
@@ -1791,7 +1733,7 @@ void process_T15_message(u8 *message, struct mxt_data *mxt)
 {
 	struct	input_dev *input;
 	u8  status = false;
-	int error = 0;
+	
 
 	input = mxt->input;
 	status = message[MXT_MSG_T15_STATUS];
@@ -2455,7 +2397,7 @@ static irqreturn_t mxt_threaded_irq(int irq, void *_mxt)
 /* boot initial delayed work */
 static void mxt_boot_delayed_initial(struct work_struct *work)
 {
-	int error, i;
+	int error;
 	struct	mxt_data *mxt;
 	mxt = container_of(work, struct mxt_data, initial_dwork.work);
 
@@ -3711,13 +3653,14 @@ static ssize_t store_object(struct device *dev, struct device_attribute *attr, c
 	/*	struct mxt_object	*object_table;//TO_CHK: not used now */
 
 	unsigned int type, offset;
-	u8 val;
-	u16	chip_addr;
+	u8 val=0;
+        unsigned char v = (unsigned char)val; //Cast val to unsigned char and fix format 
+	u16 chip_addr;
 	int ret;
 
 	mxt = dev_get_drvdata(dev);
 
-	if ((sscanf(buf, "%u %u %u", &type, &offset, &val) != 3) || (type >= MXT_MAX_OBJECT_TYPES)) {
+	if ((sscanf(buf, "%u %u %c", &type, &offset, &v) != 3) || (type >= MXT_MAX_OBJECT_TYPES)) {
 		pr_err("Invalid values");
 		return -EINVAL;
 	}
@@ -3802,13 +3745,13 @@ static ssize_t test_resume(struct device *dev, struct device_attribute *attr, ch
 #ifdef KEY_LED_CONTROL
 void key_led_on(struct mxt_data *mxt, u32 val)
 {
-	if (mxt->pdata->key_led_en1 != NULL)
+	if (mxt->pdata->key_led_en1 != 0)
 		gpio_direction_output(mxt->pdata->key_led_en1, (val & 0x01) ? true : false);
-	if (mxt->pdata->key_led_en2 != NULL)
+	if (mxt->pdata->key_led_en2 != 0)
 		gpio_direction_output(mxt->pdata->key_led_en2, (val & 0x02) ? true : false);
-	if (mxt->pdata->key_led_en3 != NULL)
+	if (mxt->pdata->key_led_en3 != 0)
 		gpio_direction_output(mxt->pdata->key_led_en3, (val & 0x04) ? true : false);
-	if (mxt->pdata->key_led_en4 != NULL)
+	if (mxt->pdata->key_led_en4 != 0)
 		gpio_direction_output(mxt->pdata->key_led_en4, (val & 0x08) ? true : false);
 }
 
@@ -4158,8 +4101,6 @@ static void check_chip_channel(struct mxt_data *mxt)
 	uint8_t i;
 	uint8_t j;
 	uint8_t x_line_limit;
-	uint8_t CAL_THR;
-	uint8_t num_of_antitouch;
 	struct i2c_client *client;
 
 	client = mxt->client;
@@ -4644,7 +4585,6 @@ static void ts_100ms_tmr_work(struct work_struct *work)
 {
 	struct mxt_data *mxt = container_of(work, struct mxt_data, tmr_work);
 
-	uint8_t cal_time = 10;
 	timer_ticks++;
 
 	klogi_if("[TSP] 100ms T %d\n", timer_ticks);
@@ -5591,7 +5531,6 @@ err_after_attr_group:
 err_after_interrupt_register:
 	if (mxt->irq)
 		free_irq(mxt->irq, mxt);
-err_after_input_register:
 	input_free_device(input);
 
 err_after_get_regulator:

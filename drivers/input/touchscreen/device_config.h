@@ -185,8 +185,8 @@
 #else
 #define T42_CTRL                  0x03
 #define T42_APPRTHR               60   /* 0 (TCHTHR/4), 1 to 255 */
-#define T42_MAXAPPRAREA           50	/* 33   /* 0 (40ch), 1 to 255 */
-#define T42_MAXTCHAREA            50	/* 33   /* 0 (35ch), 1 to 255 */
+#define T42_MAXAPPRAREA           50	/* 33    0 (40ch), 1 to 255 */
+#define T42_MAXTCHAREA            50	/* 33    0 (35ch), 1 to 255 */
 #define T42_SUPSTRENGTH           128   /* 0 (128), 1 to 255 */
 #define T42_SUPEXTTO              0   /* 0 (never expires), 1 to 255 (timeout in cycles) */
 #define T42_MAXNUMTCHS            0   /* 0 to 9 (maximum number of touches minus 1) */

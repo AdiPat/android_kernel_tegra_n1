@@ -60,7 +60,7 @@
 #define T9_MOVHYSTI               1
 #define T9_MOVHYSTN               1
 #define T9_MOVFILTER              0x2F
-#define T9_NUMTOUCH               5
+#define T9_NUMTOUCH               10 
 #define T9_MRGHYST                70
 #define T9_MRGTHR                 70
 #define T9_AMPHYST                10

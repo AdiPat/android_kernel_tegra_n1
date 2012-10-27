@@ -675,10 +675,10 @@ struct mxt_callbacks {
 struct mxt_platform_data {
 	const char *platform_name;
 	u8    numtouch; /* Number of touches to report  */
-	void  (*init_platform_hw)(void *);
-	void  (*exit_platform_hw)(void *);
-	void  (*suspend_platform_hw)(void *);
-	void  (*resume_platform_hw)(void *);
+	void  (*init_platform_hw)(struct mxt_platform_data *pdata);
+	void  (*exit_platform_hw)(struct mxt_platform_data *pdata);
+	void  (*suspend_platform_hw)(struct mxt_platform_data *pdata);
+	void  (*resume_platform_hw)(struct mxt_platform_data *pdata);
 
 	u32	key_led_en1;
 	u32	key_led_en2;

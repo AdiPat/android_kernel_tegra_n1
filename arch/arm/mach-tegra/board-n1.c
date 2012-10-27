@@ -1145,9 +1145,9 @@ static struct sec_bat_platform_data sec_bat_pdata = {
 #ifdef CONFIG_MAX8922_CHARGER
 	.sub_charger_name	= "max8922-charger",
 #endif
-	.adc_arr_size		= NULL,
+	.adc_arr_size		= 0,
 	.adc_table		= NULL,
-	.adc_channel		= NULL,
+	.adc_channel		= 0,
 	.get_init_cable_state	= sec_bat_get_init_cable_state,
 	.get_temperature	= sec_bat_get_temperature,
 	.get_batt_level	        = sec_bat_get_level,
@@ -1339,20 +1339,20 @@ static void n1_touch_exit_hw(struct mxt_platform_data *pdata)
 	pr_info("(%s,%d)\n", __func__, __LINE__);
 	gpio_free(pdata->irq_gpio);
 	gpio_free(pdata->key_led_en1);
-	if (pdata->key_led_en2 != NULL)
+	if (pdata->key_led_en2 != 0)
 	gpio_free(pdata->key_led_en2);
-	if (pdata->key_led_en3 != NULL)
+	if (pdata->key_led_en3 != 0)
 		gpio_free(pdata->key_led_en3);
-	if (pdata->key_led_en4 != NULL)
+	if (pdata->key_led_en4 != 0)
 		gpio_free(pdata->key_led_en4);
 
 	tegra_gpio_disable(pdata->irq_gpio);
 	tegra_gpio_disable(pdata->key_led_en1);
-	if (pdata->key_led_en2 != NULL)
+	if (pdata->key_led_en2 != 0)
 	tegra_gpio_disable(pdata->key_led_en2);
-	if (pdata->key_led_en3 != NULL)
+	if (pdata->key_led_en3 != 0)
 		tegra_gpio_disable(pdata->key_led_en3);
-	if (pdata->key_led_en4 != NULL)
+	if (pdata->key_led_en4 != 0)
 		tegra_gpio_disable(pdata->key_led_en4);
 }
 
@@ -1410,10 +1410,10 @@ static struct mxt_platform_data n1_mxt224E_platform_data = {
 	.resume_platform_hw = n1_touch_resume_hw,
 	.register_cb = n1_register_touch_callbacks,
 
-	.key_led_en1 = NULL,
-	.key_led_en2 = NULL,
-	.key_led_en3 = NULL,
-	.key_led_en4 = NULL,
+	.key_led_en1 = 0,
+	.key_led_en2 = 0,
+	.key_led_en3 = 0,
+	.key_led_en4 = 0,
 
 	.reg_vdd_name = "TSP_VDD_1V8",
 	.reg_vdd = NULL,
@@ -1431,7 +1431,7 @@ static struct mxt_platform_data n1_mxt224E_platform_data = {
 	.i2c_resume_pupd = TEGRA_PUPD_PULL_UP,
 	.i2c_suspend_pupd = TEGRA_PUPD_PULL_DOWN,
 	.irq_gpio = GPIO_TSP_INT,
-	.board_rev = NULL,
+	.board_rev = 0,
 };
 
 static struct i2c_board_info atmel_i2c_touch_info[] = {
@@ -1628,7 +1628,7 @@ static struct s5k4ecgx_reg_8 s5k4ecgx_power_off_2[] = {
 	{S5K4ECGX_TABLE_END, 0x0},
 };
 
-static void n1_s5k4ecgx_power_off()
+static void n1_s5k4ecgx_power_off(void)
 {
 	pr_err("%s,\n", __func__);
 

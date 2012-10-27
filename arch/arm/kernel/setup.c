@@ -799,12 +799,13 @@ static void __init squash_mem_tags(struct tag *tag)
 char boot_command_line2[COMMAND_LINE_SIZE];
 char *str_replace(char *s, const char *olds, const char *news)
 {
+ size_t newlen = strlen(news);
+ size_t oldlen = strlen(olds);
  char *result, *sr;
  int i = 0;
- size_t oldlen = strlen(olds); if (oldlen < 1) return s;
- size_t newlen = strlen(news);
-
  sr = result = boot_command_line2;
+ if (oldlen < 1) 
+ 	return s;
  while (*s) {
    if (memcmp(s, olds, oldlen) == 0) {
      memcpy(sr, news, newlen);

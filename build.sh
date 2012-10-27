@@ -60,12 +60,12 @@ done
 cd $KERNEL_DIR
 echo "Packing Ramdisk"
 cd $ROOT
-./mkbootfs $RAMDISK_DIR | gzip > ramdisk.gz
-./mkbootfs $RAMDISK_CM_DIR | gzip > ramdisk-cm10.gz 
-./mkbootfs $RAMDISK_MIUI | gzip > ramdisk-miui.gz
-./mkbootimg --kernel $KERNEL_DIR/arch/arm/boot/zImage --ramdisk ramdisk.gz -o $OUT/boot.img --base 10000000
-./mkbootimg --kernel $KERNEL_DIR/arch/arm/boot/zImage --ramdisk ramdisk-cm10.gz -o $OUT/boot_cm10.img --base 10000000
-./mkbootimg --kernel $KERNEL_DIR/arch/arm/boot/zImage --ramdisk ramdisk-miui.gz -o $OUT/boot_miui.img --base 10000000
+./mkbootfs $RAMDISK_DIR | lzma > ramdisk.lzma
+./mkbootfs $RAMDISK_CM_DIR | lzma > ramdisk-cm10.lzma 
+./mkbootfs $RAMDISK_MIUI | lzma > ramdisk-miui.lzma
+./mkbootimg --kernel $KERNEL_DIR/arch/arm/boot/zImage --ramdisk ramdisk.lzma -o $OUT/boot.img --base 10000000
+./mkbootimg --kernel $KERNEL_DIR/arch/arm/boot/zImage --ramdisk ramdisk-cm10.lzma -o $OUT/boot_cm10.img --base 10000000
+./mkbootimg --kernel $KERNEL_DIR/arch/arm/boot/zImage --ramdisk ramdisk-miui.lzma -o $OUT/boot_miui.img --base 10000000
 cd $OUT
 echo "CLear old zip files"
 rm *.zip

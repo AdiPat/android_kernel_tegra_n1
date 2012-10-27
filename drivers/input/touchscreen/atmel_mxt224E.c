@@ -31,7 +31,6 @@
 #define	DEBUG_RAW       8
 #define	DEBUG_TRACE     10
 #define	TSP_BOOST	1
-#undef TSP_BOOST /* TODO: Program this properly without frequency locks, set freq manually */
 #define	TS_100S_TIMER_INTERVAL 1
 
 #include <linux/kernel.h>

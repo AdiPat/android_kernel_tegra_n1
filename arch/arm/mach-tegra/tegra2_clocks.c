@@ -780,10 +780,9 @@ static int tegra2_pll_clk_set_rate(struct clk *c, unsigned long rate)
 
 	if (sel->input_rate == 0) {
 		unsigned long cfreq;
-		BUG_ON(c->flags & PLLU);
 		struct clk_pll_freq_table cfg;
 		sel = &cfg;
-
+		BUG_ON(c->flags & PLLU);
 		switch (input_rate) {
 		case 12000000:
 		case 26000000:

@@ -47,7 +47,7 @@
 #define USB_TXFILLTUNING        0x154
 #define USB_FIFO_TXFILL_THRES(x)   (((x) & 0x1f) << 16)
 #define USB_FIFO_TXFILL_MASK    0x1f0000
-
+#undef USB_TXFILLTUNING 
 #define USB_TXFILLTUNING        0x164
 #define USB_FIFO_TXFILL_THRES(x)   (((x) & 0x1f) << 16)
 #define USB_FIFO_TXFILL_MASK    0x1f0000
@@ -1709,7 +1709,6 @@ static int utmi_phy_postresume(struct tegra_usb_phy *phy, bool is_dpd)
 #else
 	void __iomem *pmc_base = IO_ADDRESS(TEGRA_PMC_BASE);
 #endif
-	unsigned  int inst = phy->instance;
 
 #ifndef CONFIG_ARCH_TEGRA_2x_SOC
 	val = readl(pmc_base + PMC_SLEEP_CFG);
@@ -3011,7 +3010,6 @@ int tegra_usb_phy_bus_connect(struct tegra_usb_phy *phy)
 {
 	unsigned long val;
 	void __iomem *base = phy->regs;
-	struct tegra_uhsic_config *uhsic_config = phy->config;
 
 	if (phy->usb_phy_type == TEGRA_USB_PHY_TYPE_HSIC) {
 #ifndef CONFIG_ARCH_TEGRA_2x_SOC

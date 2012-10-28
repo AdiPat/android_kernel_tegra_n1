@@ -40,7 +40,7 @@
 #include "gpio-names.h"
 #include "board.h"
 
-#define N1_HDMI_ENABLE 0
+#define N1_HDMI_ENABLE 1
 
 #if N1_HDMI_ENABLE
 #define n1_hdmi_hpd	TEGRA_GPIO_PN7
@@ -141,7 +141,7 @@ static struct resource n1_disp2_resources[] = {
 static struct tegra_dc_mode n1_panel_modes[] = {
 	{
 		.flags = TEGRA_DC_MODE_FLAG_NEG_V_SYNC | TEGRA_DC_MODE_FLAG_NEG_H_SYNC,
-		.pclk = 24000000,
+		.pclk = 27000000,
 		//.pclk = 27000000,
 		.h_ref_to_sync = 0,//.h_ref_to_sync = 11,
 		.v_ref_to_sync = 1,//.v_ref_to_sync = 1,

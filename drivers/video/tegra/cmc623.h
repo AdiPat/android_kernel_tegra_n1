@@ -434,7 +434,7 @@ static const struct Cmc623RegisterSet cmc623_cabcon3[] = {
 	/*	{0x0079, 0x403d},*/	/*PowerLUT 1E00*/
 	/*	{0x007a, 0x4500},*/	/*PowerLUT 3200*/
 	{0x007C, 0x0002},	/*Dynamic LCD*/
-	/*	{0x00b4, 0x5640},	/*CABC PWM*/
+	/*	{0x00b4, 0x5640},*/	/*CABC PWM*/
 	{0x00c8, 0x0030},	/*kb R	SCR*/
 	{0x00c9, 0x0000},	/*gc R*/
 	{0x00ca, 0xffff},	/*rm R*/

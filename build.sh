@@ -1,23 +1,27 @@
+#!/bin/bash 
+# SET SOME PATH VARIABLES
 ROOT="/home/aditya/i9103"
+# Toolchain path 
 CROSS_COMPILE="/home/aditya/Toolchain/arm-eabi-linaro-4.6.2/bin/arm-eabi"
 KERNEL_DIR="/home/aditya/i9103/Kernel"
-RAMDISK_DIR="/home/aditya/i9103/ramdisk"
-RAMDISK_MIUI="/home/aditya/i9103/ramdisk-miui"
-RAMDISK_CM_DIR="/home/aditya/i9103/ramdisk-cm10"
+RAMDISK_DIR="/home/aditya/i9103/ramdisk" # Stock RAMDISK
+RAMDISK_MIUI="/home/aditya/i9103/ramdisk-miui" # MIUI RAMDISK
+RAMDISK_CM_DIR="/home/aditya/i9103/ramdisk-cm10" # CM10 RAMDISK
 MODULES_DIR="$RAMDISK_DIR/lib/modules"
 MODULES_CM_DIR="$RAMDISK_CM_DIR/lib/modules"
 MODULES_MIUI_DIR="$RAMDISK_MIUI/lib/modules"
 OUT="/home/aditya/i9103/out"
+# Set correct base address as per device
 BASE="10000000"
+
+# DONE
+
 echo "|~~~~~~~~COMPILING TITANIUM KERNEL ~~~~~~~~~~~|"
 echo "|---------------------------------------------|"
 echo "Cleaning source"
 cd ../
-rm *.zip
-rm *.img
 rm *.gz
 cd out 
-rm *.img
 cd $KERNEL_DIR 
 export CROSS_COMPILE=$CROSS_COMPILE-
 make clean mrproper

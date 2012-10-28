@@ -391,36 +391,6 @@ static struct platform_device fuelgauge_gpio_i2c_device = {
 	.dev.platform_data		= &fuelgauge_gpio_i2c_pdata,
 };
 
-static int charger_online(void)
-{
-	struct power_supply *psp = power_supply_get_by_name("charger");
-	union power_supply_propval val;
-	int ret = 0;
-	if (!psp) {
-		pr_err("%s: fail to get charger ps\n", __func__);
-		return 0;
-	}
-	ret = psp->get_property(psp, POWER_SUPPLY_PROP_ONLINE, &val);
-	if (ret)
-		return 0;
-	return val.intval;
-}
-
-static int charger_enable(void)
-{
-	struct power_supply *psp = power_supply_get_by_name("charger");
-	union power_supply_propval val;
-	int ret = 0;
-	if (!psp) {
-		pr_err("%s: fail to get charger ps\n", __func__);
-		return 0;
-	}
-	ret = psp->get_property(psp, POWER_SUPPLY_PROP_STATUS, &val);
-	if (ret)
-		return 0;
-	return val.intval == POWER_SUPPLY_STATUS_CHARGING;
-}
-
 static int max8907c_check_vchg(void)
 {
 	struct power_supply *psp = power_supply_get_by_name("max8907c-charger");
@@ -834,24 +804,6 @@ static struct i2c_board_info sec_gpio_i2c11_info[] = {
 		I2C_BOARD_INFO("fsa9480", 0x4A>>1),
 		.platform_data = &fsa9480_pdata,
 		.irq = GPIO_JACK_nINT,
-	},
-};
-
-static struct i2c_board_info sec_gpio_i2c13_info[] = {
-};
-
-static struct i2c_board_info sec_gpio_i2c14_info[] = {
-	{
-		I2C_BOARD_INFO("SII9234", 0x72>>1),
-	},
-	{
-		I2C_BOARD_INFO("SII9234A", 0x7A>>1),
-	},
-	{
-		I2C_BOARD_INFO("SII9234B", 0x92>>1),
-	},
-	{
-		I2C_BOARD_INFO("SII9234C", 0xC8>>1),
 	},
 };
 

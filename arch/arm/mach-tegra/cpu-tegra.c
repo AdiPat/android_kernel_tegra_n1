@@ -482,19 +482,8 @@ int tegra_update_cpu_speed(unsigned long rate)
 {
 	int ret = 0;
 	struct cpufreq_freqs freqs;
-
 	freqs.old = tegra_getspeed(0);
-#ifdef CONFIG_TEGRA_CPU_FREQ_LOCK
-	/*
-	 * Thermal throttling supersedes cpufreq lock.
-	 * cpufreq goes down to minimum during the suspend mode.
-	 */
-	if (!tegra_is_throttling() && is_cpufreq_locked
-		&& !is_suspended && (rate < cpulock_freq))
-		freqs.new = cpulock_freq;
-	else
-#endif /* CONFIG_TEGRA_CPU_FREQ_LOCK */
-		freqs.new = rate;
+	freqs.new = rate;
 
 	rate = clk_round_rate(cpu_clk, rate * 1000);
 	if (!IS_ERR_VALUE(rate))
@@ -796,21 +785,9 @@ static int tegra_cpu_init(struct cpufreq_policy *policy)
 
 	cpufreq_frequency_table_cpuinfo(policy, freq_table);
 	cpufreq_frequency_table_get_attr(freq_table, policy->cpu);
-
-	if (cpufreq_frequency_table_cpuinfo(policy, freq_table)) {
-#if defined(CONFIG_TEGRA_CPU_FREQ_SET_MIN_MAX)
-            policy->cpuinfo.min_freq = CONFIG_TEGRA_CPU_FREQ_MIN;
-            policy->cpuinfo.max_freq = CONFIG_TEGRA_CPU_FREQ_MAX;
-#endif
-}
-#if defined(CONFIG_TEGRA_CPU_FREQ_SET_MIN_MAX)
-           policy->min = CONFIG_TEGRA_CPU_FREQ_MIN;
-           policy->max = CONFIG_TEGRA_CPU_FREQ_MAX;
-#endif
-
 	policy->cur = tegra_getspeed(policy->cpu);
 	target_cpu_speed[policy->cpu] = policy->cur;
-
+	
 	/* FIXME: what's the actual transition time? */
 	policy->cpuinfo.transition_latency = 300 * 1000;
 
@@ -892,10 +869,7 @@ static int __init tegra_cpufreq_init(void)
 
 	freq_table = table_data->freq_table;
 	tegra_cpu_edp_init(false);
-#ifdef CONFIG_TEGRA_CPU_FREQ_LOCK
-	hrtimer_init(&cpulock_timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
-	cpulock_timer.function = tegra_cpulock_timer_func;
-#endif /* CONFIG_TEGRA_CPU_FREQ_LOCK */
+
 	ret = cpufreq_register_notifier(
 		&tegra_cpufreq_policy_nb, CPUFREQ_POLICY_NOTIFIER);
 	if (ret)

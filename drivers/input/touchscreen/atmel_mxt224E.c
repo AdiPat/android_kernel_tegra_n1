@@ -486,7 +486,7 @@ static struct multi_touch_info mtouch_info[MXT_MAX_NUM_TOUCHES];
 static bool palm_check_timer_flag = false;
 static bool palm_release_flag = true;
 
-//#define TOUCH_LOCKUP_PATTERN_RELEASE
+#define TOUCH_LOCKUP_PATTERN_RELEASE
 
 #ifdef TOUCH_LOCKUP_PATTERN_RELEASE
 

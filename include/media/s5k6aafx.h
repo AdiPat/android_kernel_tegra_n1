@@ -184,7 +184,7 @@ typedef enum {
 
 
 struct s5k6aafx_reg_8 {
-	u16 addr;
+	u8 addr;
 	u8 val;
 };
 struct s5k6aafx_reg {

@@ -295,7 +295,7 @@ struct s5k4ecgx_capture_resolution {
 };
 
 struct s5k4ecgx_reg_8 {
-	u16 addr;
+	u8 addr;
 	u8 val;
 };
 
@@ -323,8 +323,8 @@ int s5k4ecgx_write_table_8(struct i2c_client *client,
 struct s5k4ecgx_platform_data {
 	void (*power_on)(void);
 	void (*power_off)(void);
-	int (*flash_onoff)(int enable);
-	int (*torch_onoff)(int enable);
+	void (*flash_onoff)(int);
+	void (*torch_onoff)(int);
 };
 #endif /* __KERNEL__ */
 

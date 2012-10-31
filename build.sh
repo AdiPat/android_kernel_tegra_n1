@@ -3,7 +3,7 @@
 ROOT="/home/aditya/i9103"
 # Toolchain path 
 CROSS_COMPILE="/home/aditya/Toolchain/arm-eabi-linaro-4.6.2/bin/arm-eabi"
-KERNEL_DIR="/home/aditya/i9103/Kernel"
+KERNEL_DIR="/home/aditya/i9103/experimental2"
 RAMDISK_DIR="/home/aditya/i9103/ramdisk" # Stock RAMDISK
 RAMDISK_MIUI="/home/aditya/i9103/ramdisk-miui" # MIUI RAMDISK
 RAMDISK_CM_DIR="/home/aditya/i9103/ramdisk-cm10" # CM10 RAMDISK

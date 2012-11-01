@@ -251,6 +251,11 @@ config INPUT_KXTJ9
 	  To compile this driver as a module, choose M here: the module will
 	  be called kxtj9.
 
+config INPUT_KXTJ9
+	tristate "Kionix KXTF9 tri-axis digital accelerometer"
+	help
+	  No help here
+
 config INPUT_KXTJ9_POLLED_MODE
 	bool "Enable polling mode support"
 	depends on INPUT_KXTJ9

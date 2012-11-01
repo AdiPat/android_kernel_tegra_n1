@@ -35,6 +35,12 @@ echo "Copying modules and stripping em"
 find -name '*.ko' -exec cp -av {} $MODULES_DIR/ \;
 find -name '*.ko' -exec cp -av {} $MODULES_CM_DIR/ \;
 find -name '*.ko' -exec cp -av {} $MODULES_MIUI_DIR/ \;
+
+# Remove KXTF9 Module from ICS/MIUI ramdisk
+rm $MODULES_DIR/kxtf9.ko
+rm $MODULES_MIUI_DIR/kxtf9.ko
+##########################################
+
 cd $MODULES_DIR
 echo "Strip modules for size"
 
